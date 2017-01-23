@@ -1,20 +1,15 @@
 // This #include statement was automatically added by the Particle IDE.
 #include "sevensegment.h"
-//Test
-
 // This #include statement was automatically added by the Particle IDE.
 #include "application.h"
 #include "HttpClient/HttpClient.h"
-
-//something
 
 /**
 * Declaring the variables.
 */
 
 int bathroom_id = 1;
-int led1 = D2;
-int led2 = D7;
+int led1 = D7;
 int numberOfStalls = 4;
 
 unsigned int nextTime = 0;    // Next time to contact the server
@@ -33,9 +28,8 @@ http_response_t response;
 
 void setup() {
  pinMode(led1, OUTPUT);
- pinMode(led2, OUTPUT);
- for (int i = 1; i < numberOfStalls+1; i++) {
-     pintMode(getStallPin(i), INPUT_PULLDOWN);
+ for (int i = 0; i < numberOfStalls; i++) {
+     pinMode(getStallPin(i), INPUT_PULLDOWN);
  }
     Serial.begin(9600);
 }
@@ -43,16 +37,25 @@ void setup() {
 void loop() {
     if (nextTime > millis()) {
         if (isAStallClosed()) {
-            setLeds(digitalRead(switchIn));
+            setLeds(HIGH);
+        } else {
+            setLeds(LOW);
         }
         return;
     }
 
+    updateAllStalls();
     nextTime = millis() + 3000;
 }
 
+void updateAllStalls() {
+    for (int i = 0; i< numberOfStalls; i++) {
+        callUrlForStall(i);
+    }
+}
+
 void callUrlForStall(int stallNumber) {
-     request.hostname = "pardot-pingpong.herokuapp.com";
+    request.hostname = "pardot-pingpong.herokuapp.com";
     request.port = 80;
     request.path = "/bathrooms/" + String(bathroom_id) + "/stalls/" + String(stallNumber) +"/" + convertToBool(readStall(stallNumber)) + ".json";
 
@@ -70,31 +73,30 @@ String convertToBool(int digitalRead) {
 
 void setLeds(int value) {
   digitalWrite(led1, value);
-  digitalWrite(led2, value);
 }
 
 int getStallPin( int stallNumber) {
     switch (stallNumber) {
-        case 1: return D0;
-        case 2: return D1;
-        case 3: return D2:
-        case 4: return D3:
-        default : return D0;
+        case 0: return D0;
+        case 1: return D1;
+        case 2: return D2;
+        case 3: return D3;
+        default :  D0;
     }
 }
 
 int readStall( int stallNumber) {
     switch (stallNumber) {
-        case 1: return digitalRead(getStallPin(D0));
-        case 2: return digitalRead(getStallPin(D1));
-        case 3: return digitalRead(getStallPin(D2)):
-        case 4: return digitalRead(getStallPin(D3)):
-        default : return digitalRead(getStallPin(D0));
+        case 0: return digitalRead(getStallPin(0));
+        case 1: return digitalRead(getStallPin(1));
+        case 2: return digitalRead(getStallPin(2));
+        case 3: return digitalRead(getStallPin(3));
+        default : return digitalRead(getStallPin(0));
     }
 }
 
 bool isAStallClosed() {
-    for (int i = 1; i< numberOfStalls+1; i++) {
+    for (int i = 0; i< numberOfStalls; i++) {
         if (readStall(i) == HIGH) {
             return true;
         }
