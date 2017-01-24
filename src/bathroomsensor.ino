@@ -49,7 +49,7 @@ void loop() {
 }
 
 void updateAllStalls() {
-    for (int i = 0; i< numberOfStalls; i++) {
+    for (int i = 0; i < numberOfStalls; i++) {
         callUrlForStall(i);
     }
 }
@@ -96,7 +96,7 @@ int readStall( int stallNumber) {
 }
 
 bool isAStallClosed() {
-    for (int i = 0; i< numberOfStalls; i++) {
+    for (int i = 0; i < numberOfStalls; i++) {
         if (readStall(i) == HIGH) {
             return true;
         }
