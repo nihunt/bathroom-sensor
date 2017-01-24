@@ -1,28 +1,18 @@
 #include "sevensegment.h"
 #include "application.h"
 
-// set this to the first pin where wiring starts.
-int ledStart = 30;
+int[] pinArray = {};
 
 // set to true if the common pin is HIGH, false otherwise
 bool commonHigh = true;
 
 
-void setup() {
+void sevensegmentSetup() {
   // Enable all A-G and DP and outputs,
   // set them to OFF (if common is high, then 1 is off).
   for(int i = 0;i < 8; ++i) {
-    pinMode(ledStart + i, OUTPUT);
-    digitalWrite(ledStart + i, commonHigh? 1:0);
-  }
-}
-
-void loop() {
-  // write the number 0 - F (hex)
-  // onto the display each half second
-  for(int i = 0; i < 16; i++) {
-    writeDigitToDisplay(i);
-    delay(500);
+    pinMode(pinArray[i], OUTPUT);
+    digitalWrite(pinArray[i], commonHigh? 1:0);
   }
 }
 
@@ -65,6 +55,11 @@ void writeDigitToDisplay(int digit) {
     }
 
     // and lastly set the bit
-    digitalWrite(ledStart + i, bitOn);
+    digitalWrite(pinArray[i], bitOn);
   }
+}
+
+void setPinArray(int[] pinArr)
+{
+  pinArray = pinArr;
 }

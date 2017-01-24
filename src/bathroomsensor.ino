@@ -32,6 +32,7 @@ void setup() {
      pinMode(getStallPin(i), INPUT_PULLDOWN);
  }
     Serial.begin(9600);
+    sevensegmentSetup();
 }
 
 void loop() {
@@ -45,6 +46,7 @@ void loop() {
     }
 
     updateAllStalls();
+    updateSevensegmentDisplay();
     nextTime = millis() + 3000;
 }
 
@@ -52,6 +54,15 @@ void updateAllStalls() {
     for (int i = 0; i < numberOfStalls; i++) {
         callUrlForStall(i);
     }
+}
+
+void updateSevensegmentDisplay() {
+  // write the number 0 - F (hex)
+  // onto the display each half second
+  for(int i = 0; i < 16; i++) {
+    writeDigitToDisplay(i);
+    delay(500);
+  }
 }
 
 void callUrlForStall(int stallNumber) {

@@ -1,12 +1,8 @@
 #ifndef sevensegment
 #define sevensegment
 
-
-#include "application.h"
-#include "spark_wiring_string.h"
-#include "spark_wiring_tcpclient.h"
-#include "spark_wiring_usbserial.h"
-
+void sevensegmentSetup();
 void writeDigitToDisplay(int digit);
+void updateSevensegmentDisplay();
 
 #endif
