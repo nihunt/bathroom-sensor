@@ -1,8 +1,13 @@
-#ifndef sevensegment
-#define sevensegment
+#ifndef _SevenSegment_
+#define _SevenSegment_
 
-void sevensegmentSetup();
-void writeDigitToDisplay(int digit);
-void updateSevensegmentDisplay();
+#include "application.h"
+
+class SevenSegment {
+public:
+  SevenSegment(int* pinArr);
+  SevenSegment(void);
+  void writeDigitToDisplay(int digit);
+};
 
 #endif

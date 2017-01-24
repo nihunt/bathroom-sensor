@@ -1,18 +1,19 @@
-#include "sevensegment.h"
-#include "application.h"
+#include "SevenSegment.h"
 
-int[] pinArray = {};
+int* pinArray;
 
 // set to true if the common pin is HIGH, false otherwise
 bool commonHigh = true;
 
 
-void sevensegmentSetup() {
+SevenSegment::SevenSegment(int* pinArr)
+{
+  pinArray = pinArr;
   // Enable all A-G and DP and outputs,
   // set them to OFF (if common is high, then 1 is off).
   for(int i = 0;i < 8; ++i) {
     pinMode(pinArray[i], OUTPUT);
-    digitalWrite(pinArray[i], commonHigh? 1:0);
+    digitalWrite(pinArray[i], LOW);
   }
 }
 
@@ -40,7 +41,7 @@ int dig[16] = {
           0b1000111 //f
 };
 
-void writeDigitToDisplay(int digit) {
+void SevenSegment::writeDigitToDisplay(int digit) {
   // iterate through each bit
   for(int i = 0; i < 7; ++i) {
     // isolate the current bit in the loop.
@@ -57,9 +58,4 @@ void writeDigitToDisplay(int digit) {
     // and lastly set the bit
     digitalWrite(pinArray[i], bitOn);
   }
-}
-
-void setPinArray(int[] pinArr)
-{
-  pinArray = pinArr;
 }

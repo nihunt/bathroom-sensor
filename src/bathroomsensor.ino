@@ -1,5 +1,5 @@
 // This #include statement was automatically added by the Particle IDE.
-#include "sevensegment.h"
+#include "SevenSegment.h"
 // This #include statement was automatically added by the Particle IDE.
 #include "application.h"
 #include "HttpClient/HttpClient.h"
@@ -11,9 +11,11 @@
 int bathroom_id = 1;
 int led1 = D7;
 int numberOfStalls = 4;
+int tempDigit = 0;
 
 unsigned int nextTime = 0;    // Next time to contact the server
 HttpClient http;
+SevenSegment sev((int[]){A0, A1, A2, A3, A4, A5, D6});
 
 // Headers currently need to be set at init, useful for API keys etc.
 http_header_t headers[] = {
@@ -32,7 +34,8 @@ void setup() {
      pinMode(getStallPin(i), INPUT_PULLDOWN);
  }
     Serial.begin(9600);
-    sevensegmentSetup();
+    /*int secondarray[] = {A0, A1, A2, A3, A4, A5, D6};
+    sev.initialize(secondarray);*/
 }
 
 void loop() {
@@ -46,7 +49,7 @@ void loop() {
     }
 
     updateAllStalls();
-    updateSevensegmentDisplay();
+    updateSevenSegmentDisplay();
     nextTime = millis() + 3000;
 }
 
@@ -56,12 +59,12 @@ void updateAllStalls() {
     }
 }
 
-void updateSevensegmentDisplay() {
-  // write the number 0 - F (hex)
-  // onto the display each half second
-  for(int i = 0; i < 16; i++) {
-    writeDigitToDisplay(i);
-    delay(500);
+void updateSevenSegmentDisplay() {
+  sev.writeDigitToDisplay(tempDigit);
+  if(tempDigit == 15) {
+    tempDigit = 0;
+  } else {
+    tempDigit++;
   }
 }
 
